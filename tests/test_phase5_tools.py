@@ -630,7 +630,7 @@ def test_retry_payment_captured_reaches_recovered(
     ).execute(
         case.id,
         tool_name="retry_payment",
-        payload={"intended_status": "CAPTURED"},
+        payload={"attempt_number": 1},
         idempotency_key="e2e-retry-captured",
         merchant_id=case.merchant_id,
     )
