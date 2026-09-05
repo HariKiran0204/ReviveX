@@ -46,7 +46,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./data/ml:/app/data/ml:rw
+      - ../data/ml/models:/app/data/ml/models:ro
     depends_on:
       postgres:
         condition: service_healthy
@@ -79,7 +79,7 @@ services:
       REDIS_URL: redis://redis:6379/0
       SIMULATION_SEED: "42"
     volumes:
-      - ./data/ml:/app/data/ml:rw
+      - ../data/ml/models:/app/data/ml/models:ro
     depends_on:
       postgres:
         condition: service_healthy
