@@ -45,6 +45,8 @@ services:
       SIMULATION_SEED: "42"
     ports:
       - "8000:8000"
+    volumes:
+      - ./data/ml:/app/data/ml:rw
     depends_on:
       postgres:
         condition: service_healthy
@@ -76,6 +78,8 @@ services:
       DATABASE_URL: postgresql+psycopg://recoverai:recoverai@postgres:5432/recoverai
       REDIS_URL: redis://redis:6379/0
       SIMULATION_SEED: "42"
+    volumes:
+      - ./data/ml:/app/data/ml:rw
     depends_on:
       postgres:
         condition: service_healthy
@@ -89,7 +93,7 @@ services:
       context: ..
       dockerfile: infra/Dockerfile.web
     environment:
-      NEXT_PUBLIC_API_URL: http://api:8000
+      NEXT_PUBLIC_API_URL: http://localhost:8000
     ports:
       - "3000:3000"
     depends_on:
