@@ -46,7 +46,23 @@ def run_operator_demo(
             amount=amount or Decimal("499.00"),
         )
         cases = _drain_and_process(session, queue, process_cases=True)
-        return _demo_result("run_demo", acks, cases, extra={"seed": resolved_seed})
+        # Execute a retry on each case to demonstrate end-to-end recovery in the demo UI.
+        executions = []
+        for case in cases:
+            RecoveryCaseProcessor(session, settings).walk_to_policy_check(case)
+            session.flush()
+            result = ToolExecutionService(session, settings=settings, queue=queue).execute(
+                case.id,
+                action="RETRY_NOW",
+                payload={"attempt_number": 1},
+                idempotency_key=f"demo-run-{resolved_seed}-{case.id}",
+                merchant_id=case.merchant_id,
+                actor_id="demo-operator",
+            )
+            executions.append(result.to_public_dict())
+        # Process the retry payment capture event and verification followup
+        cases = _drain_and_process(session, queue, process_cases=True)
+        return _demo_result("run_demo", acks, cases, extra={"seed": resolved_seed, "executions": executions})
 
     if key in {"failed_payment", "create_failed_payment"}:
         acks = run_scenario(
