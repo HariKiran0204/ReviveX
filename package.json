@@ -1,0 +1,12 @@
+{
+  "name": "recoverai",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "pnpm --filter recoverai-web dev",
+    "lint": "pnpm --filter recoverai-web lint",
+    "typecheck": "pnpm --filter recoverai-web typecheck",
+    "test": "pnpm --filter recoverai-web test",
+    "build": "pnpm --filter recoverai-web build"
+  }
+}
