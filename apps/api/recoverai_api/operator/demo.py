@@ -144,7 +144,7 @@ def run_operator_demo(
             result = ToolExecutionService(session, settings=settings, queue=queue).execute(
                 case.id,
                 action="RETRY_NOW",
-                payload={"intended_status": "CAPTURED"},
+                payload={"attempt_number": 1},
                 idempotency_key=f"demo-full-{resolved_seed}-{case.id}",
                 merchant_id=case.merchant_id,
                 actor_id="demo-operator",
@@ -177,7 +177,7 @@ def run_operator_demo(
             result = ToolExecutionService(session, settings=settings, queue=queue).execute(
                 case.id,
                 action="RETRY_NOW",
-                payload={"intended_status": "FAILED"},
+                payload={"attempt_number": 2},
                 idempotency_key=f"demo-failed-{resolved_seed}-{case.id}",
                 merchant_id=case.merchant_id,
                 actor_id="demo-operator",
